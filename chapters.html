@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avanify – NCERT Chapters</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0a0e1a;
+            --blue: #1a6bff;
+            --electric: #3d8eff;
+            --cyan: #00d4ff;
+            --yellow: #ffe040;
+            --green: #00e887;
+            --pink: #ff4faf;
+            --white: #f0f4ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 5%;
+            background: rgba(10, 14, 26, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .logo span {
+            -webkit-text-fill-color: var(--yellow);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 8px 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nb-ghost {
+            border: 1px solid var(--border);
+            color: rgba(240, 244, 255, 0.7);
+        }
+
+        .nb-ghost:hover {
+            border-color: var(--blue);
+            color: var(--white);
+        }
+
+        .nb-solid {
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(26, 107, 255, 0.35);
+        }
+
+        /* ─── HERO ─── */
+        .page-hero {
+            text-align: center;
+            padding: 70px 5% 50px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(26, 107, 255, 0.15), transparent 60%);
+        }
+
+        .page-hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .page-hero p {
+            font-size: 1rem;
+            color: rgba(240, 244, 255, 0.55);
+        }
+
+        /* ─── SUBJECT TABS ─── */
+        .subject-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 0 5%;
+            margin-bottom: 40px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-top: 10px;
+        }
+
+        .subject-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .stab {
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: 1.5px solid var(--border);
+            background: transparent;
+            color: rgba(240, 244, 255, 0.6);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stab:hover {
+            border-color: var(--blue);
+            color: var(--white);
+        }
+
+        .stab.active {
+            color: var(--ink);
+            font-weight: 700;
+            border-color: transparent;
+        }
+
+        .stab-science.active {
+            background: linear-gradient(135deg, #1a6bff, #00d4ff);
+        }
+
+        .stab-math.active {
+            background: linear-gradient(135deg, #ff4faf, #ff8c00);
+        }
+
+        .stab-sst.active {
+            background: linear-gradient(135deg, #00e887, #00b4d8);
+        }
+
+        .stab-english.active {
+            background: linear-gradient(135deg, #7c3aed, #ff4faf);
+        }
+
+        .stab-hindi.active {
+            background: linear-gradient(135deg, #ff6b35, #ffe040);
+        }
+
+        /* ─── CHAPTERS GRID ─── */
+        .content-area {
+            padding: 0 5% 80px;
+        }
+
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 20px;
+        }
+
+        .chapter-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--card-color, var(--blue));
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-top {
+            padding: 24px;
+            background: linear-gradient(135deg, var(--card-color, var(--blue)), transparent);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .card-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: rgba(240, 244, 255, 0.4);
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .card-body {
+            padding: 20px 24px;
+        }
+
+        .card-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .kw {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(240, 244, 255, 0.6);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: rgba(240, 244, 255, 0.7);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+
+        .card-btn:hover,
+        .card-btn.primary {
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .card-btn.primary {
+            background: var(--card-color, var(--blue));
+            border-color: transparent;
+            color: #fff;
+        }
+
+        /* ─── CHAPTER MODAL ─── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(10, 14, 26, 0.85);
+            backdrop-filter: blur(8px);
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .modal {
+            background: #0d1b3e;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 760px;
+            overflow: hidden;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: var(--white);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .summary-section {
+            margin-bottom: 28px;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 2px;
+            background: var(--cyan);
+            border-radius: 2px;
+        }
+
+        .summary-text {
+            font-size: 0.92rem;
+            color: rgba(240, 244, 255, 0.75);
+            line-height: 1.8;
+        }
+
+        .formula-box {
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 12px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kw-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .kw-full {
+            padding: 5px 14px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.82rem;
+            color: rgba(240, 244, 255, 0.75);
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .faq-q {
+            padding: 14px 18px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.04);
+            transition: background 0.2s;
+        }
+
+        .faq-q:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .faq-a {
+            padding: 14px 18px;
+            font-size: 0.86rem;
+            color: rgba(240, 244, 255, 0.65);
+            line-height: 1.7;
+            display: none;
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-item.open .faq-a {
+            display: block;
+        }
+
+        .modal-footer {
+            padding: 24px 32px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .mf-btn {
+            padding: 11px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mf-primary {
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(26, 107, 255, 0.35);
+        }
+
+        .mf-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: rgba(240, 244, 255, 0.7);
+        }
+
+        .mf-ghost:hover {
+            border-color: var(--blue);
+        }
+
+        @media(max-width:640px) {
+            .chapter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                margin: 0;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html" class="logo">Avani<span>fy</span></a>
+        <div class="nav-right">
+            <a href="ai-doubt.html" class="nav-btn nb-ghost">⚡ AI Doubts</a>
+            <a href="dashboard.html" class="nav-btn nb-ghost">Dashboard</a>
+            <a href="login.html" class="nav-btn nb-solid">Login</a>
+        </div>
+    </nav>
+
+    <div class="page-hero">
+        <h1>📚 NCERT Class 9 Chapters</h1>
+        <p>Explore all subjects · Read summaries · Ask AI doubts · Track progress</p>
+    </div>
+
+    <div class="subject-tabs">
+        <button class="stab stab-science active" onclick="showSubject('science',this)">🔬 Science</button>
+        <button class="stab stab-math" onclick="showSubject('math',this)">📐 Mathematics</button>
+        <button class="stab stab-sst" onclick="showSubject('sst',this)">🌏 Social Science</button>
+        <button class="stab stab-english" onclick="showSubject('english',this)">📖 English</button>
+        <button class="stab stab-hindi" onclick="showSubject('hindi',this)">📜 Hindi</button>
+    </div>
+
+    <div class="content-area">
+        <div class="chapter-grid" id="chapterGrid"></div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" id="modal" onclick="event.stopPropagation()">
+            <div class="modal-header" id="modalHeader"></div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script>
+        const CHAPTERS_DATA = {
+            science: [
+                {
+                    icon: '🏃', title: 'Motion', color: 'var(--blue)', keywords: ['distance', 'displacement', 'speed', 'velocity', 'acceleration', 'uniform motion', 'non-uniform motion', 'graphs'],
+                    summary: 'Motion describes the change in position of an object over time. Distance is the total path length, while displacement is the shortest path (with direction). Velocity is speed with direction, and acceleration is the rate of change of velocity. Graphs of motion (distance-time, velocity-time) help visualize these concepts.',
+                    formulas: ['v = u + at', 's = ut + ½at²', 'v² = u² + 2as'],
+                    faqs: [{ q: 'What is the difference between distance and displacement?', a: 'Distance is the total path length traveled (scalar), while displacement is the shortest straight-line distance from start to end point (vector) — it includes direction.' }, { q: 'What is uniform motion?', a: 'When an object covers equal distances in equal intervals of time, it is said to be in uniform motion. Example: a car moving at constant 60 km/h.' }]
+                },
+                {
+                    icon: '⚡', title: 'Force and Laws of Motion', color: 'var(--cyan)', keywords: ['inertia', 'Newton\'s laws', 'momentum', 'balanced force', 'unbalanced force'],
+                    summary: 'Force causes acceleration. Newton\'s 3 Laws govern all motion. Inertia is the tendency to resist change in state. Momentum (p = mv) is always conserved. Balanced forces = no acceleration. Unbalanced forces = acceleration.',
+                    formulas: ['F = ma', 'p = mv', 'F = Δp/Δt'],
+                    faqs: [{ q: 'State Newton\'s Second Law.', a: 'The net force on an object equals the rate of change of momentum. In simple terms: F = ma (Force = mass × acceleration).' }, { q: 'What is inertia?', a: 'Inertia is the property of an object to resist any change in its state of rest or motion. Heavier objects have more inertia.' }]
+                },
+                {
+                    icon: '🌍', title: 'Gravitation', color: 'var(--yellow)', keywords: ['gravity', 'free fall', 'thrust', 'pressure', 'buoyancy', 'Archimedes principle'],
+                    summary: 'Every object with mass attracts every other object. Earth\'s gravitational acceleration g = 9.8 m/s². Weight = mg. Pressure = Force/Area. Buoyancy explains why objects float or sink (Archimedes\' Principle).',
+                    formulas: ['F = GMm/r²', 'g = 9.8 m/s²', 'P = F/A'],
+                    faqs: [{ q: 'What is free fall?', a: 'When an object falls only under the influence of gravity (no air resistance), it is called free fall. All objects fall with the same acceleration g = 9.8 m/s² in free fall.' }, { q: 'State Archimedes\' Principle.', a: 'When a body is immersed in a fluid, it experiences an upward buoyant force equal to the weight of the fluid displaced.' }]
+                },
+                {
+                    icon: '⚙️', title: 'Work and Energy', color: 'var(--green)', keywords: ['work', 'kinetic energy', 'potential energy', 'power', 'conservation of energy'],
+                    summary: 'Work is done when force causes displacement in its direction (W = F·d). Kinetic energy is energy of motion (½mv²). Potential energy is stored energy (mgh). The law of conservation of energy states energy can neither be created nor destroyed.',
+                    formulas: ['W = Fs cosθ', 'KE = ½mv²', 'PE = mgh', 'Power = W/t'],
+                    faqs: [{ q: 'When is work said to be done?', a: 'Work is done when a force is applied on an object AND the object moves in the direction of the force. If displacement is zero or perpendicular to force, work done is zero.' }, { q: 'What is conservation of energy?', a: 'Energy can neither be created nor destroyed — it can only be converted from one form to another. Total energy of a closed system remains constant.' }]
+                },
+                {
+                    icon: '🔊', title: 'Sound', color: 'var(--pink)', keywords: ['wave', 'frequency', 'amplitude', 'echo', 'sonar', 'speed of sound'],
+                    summary: 'Sound is a mechanical wave produced by vibrations. It needs a medium to travel. Speed in air ≈ 343 m/s. Frequency (Hz) determines pitch, amplitude determines loudness. Echo = reflected sound. SONAR uses sound to detect underwater objects.',
+                    formulas: ['v = fλ', 'Echo distance = v×t/2'],
+                    faqs: [{ q: 'What is an echo?', a: 'An echo is a reflected sound heard after the original sound. For an echo to be heard, the reflecting surface must be at least 17.2 m away (time gap > 0.1 s).' }, { q: 'What is SONAR?', a: 'SONAR (Sound Navigation and Ranging) uses ultrasonic waves to detect and locate objects underwater, like submarines and fish shoals.' }]
+                },
+                {
+                    icon: '🧪', title: 'Matter in Our Surroundings', color: '#a78bfa', keywords: ['states of matter', 'solid', 'liquid', 'gas', 'diffusion', 'evaporation', 'boiling'],
+                    summary: 'Matter exists in three states: solid, liquid, and gas. Interconversion happens due to changes in temperature and pressure. Evaporation causes cooling. Diffusion is the spreading of particles from high to low concentration.',
+                    formulas: ['At 0°C: water → ice', 'At 100°C: water → steam'],
+                    faqs: [{ q: 'Why does evaporation cause cooling?', a: 'During evaporation, the particles with highest kinetic energy escape. This reduces the average kinetic energy of remaining liquid, decreasing temperature — causing cooling effect.' }, { q: 'What is diffusion?', a: 'Diffusion is the intermixing of particles of two substances on their own. Example: smell of perfume spreading in a room.' }]
+                },
+                {
+                    icon: '🔩', title: 'Is Matter Around Us Pure', color: 'var(--blue)', keywords: ['mixture', 'compound', 'solution', 'colloid', 'suspension', 'tyndall effect'],
+                    summary: 'Pure substances are elements or compounds. Mixtures can be separated by filtration, distillation, chromatography, etc. Solutions have solute + solvent. Colloids show Tyndall Effect (scattering of light).',
+                    formulas: ['Concentration = (solute/solution) × 100'],
+                    faqs: [{ q: 'What is the Tyndall Effect?', a: 'The scattering of a beam of light by particles in a colloid is called the Tyndall Effect. Example: rays of sunlight through dusty air or through a glass of milk.' }, { q: 'How is a mixture different from a compound?', a: 'In a mixture, substances are physically combined and can be separated. In a compound, elements are chemically bonded in fixed ratios and cannot be separated by physical means.' }]
+                },
+                {
+                    icon: '⚛️', title: 'Atoms and Molecules', color: 'var(--cyan)', keywords: ['atom', 'molecule', 'atomic mass', 'mole', 'Avogadro\'s number', 'chemical formula'],
+                    summary: 'Atoms are the smallest units of elements. Molecules are combinations of atoms. The mole concept links atomic/molecular mass to measurable amounts. Avogadro\'s number = 6.022 × 10²³ particles per mole.',
+                    formulas: ['n = m/M', 'N = n × 6.022×10²³'],
+                    faqs: [{ q: 'What is a mole?', a: 'A mole is a unit of measurement = 6.022 × 10²³ particles (Avogadro\'s Number). 1 mole of any substance = its molecular mass in grams.' }, { q: 'What is the difference between an atom and a molecule?', a: 'An atom is the smallest particle of an element. A molecule is the smallest particle of a substance that can exist independently, made of 2 or more atoms.' }]
+                },
+                {
+                    icon: '🔋', title: 'Structure of Atom', color: 'var(--yellow)', keywords: ['electron', 'proton', 'neutron', 'Bohr model', 'atomic number', 'mass number'],
+                    summary: 'Atoms have a nucleus (protons + neutrons) with electrons orbiting. Atomic number = number of protons. Mass number = protons + neutrons. Bohr\'s model shows electrons in fixed energy levels (shells).',
+                    formulas: ['Atomic number = number of protons', 'Mass number = protons + neutrons'],
+                    faqs: [{ q: 'What is Bohr\'s Atomic Model?', a: 'Bohr proposed that electrons revolve around the nucleus in fixed circular orbits called shells or energy levels, numbered K, L, M, N from inside. Electrons can absorb/emit energy when jumping between shells.' }, { q: 'What is an isotope?', a: 'Isotopes are atoms of the same element with the same atomic number but different mass numbers. Example: Carbon-12 and Carbon-14 are both carbon isotopes.' }]
+                },
+                {
+                    icon: '🦠', title: 'The Fundamental Unit of Life', color: 'var(--green)', keywords: ['cell', 'nucleus', 'membrane', 'organelle', 'prokaryote', 'eukaryote'],
+                    summary: 'All living things are made of cells. Prokaryotes (bacteria) have no nucleus; eukaryotes do. Key organelles: nucleus (control center), mitochondria (energy), chloroplasts (photosynthesis in plants), ribosome (protein synthesis).',
+                    formulas: ['Cell Theory: all living things are made of cells'],
+                    faqs: [{ q: 'What is the difference between plant and animal cells?', a: 'Plant cells have a cell wall (rigid), chloroplasts (for photosynthesis), and a large vacuole. Animal cells have centrioles, lack cell wall and chloroplasts.' }, { q: 'What is osmosis?', a: 'Osmosis is the movement of water molecules through a semipermeable membrane from a region of low solute concentration (high water potential) to high solute concentration (low water potential).' }]
+                },
+                {
+                    icon: '🌿', title: 'Tissues', color: 'var(--pink)', keywords: ['plant tissue', 'animal tissue', 'meristematic', 'permanent', 'epithelial', 'muscular'],
+                    summary: 'Tissues are groups of similar cells performing the same function. Plant tissues: meristematic (dividing) and permanent (non-dividing). Animal tissues: epithelial, connective, muscular, nervous.',
+                    formulas: ['Plants: Meristematic → Permanent tissues', 'Animals: Epithelial, Connective, Muscle, Nerve'],
+                    faqs: [{ q: 'What are meristematic tissues?', a: 'These are tissues with actively dividing cells found at growing tips (apical meristem), sides (lateral meristem), and between nodes (intercalary meristem). They are responsible for plant growth.' }, { q: 'What is connective tissue?', a: 'Connective tissue connects and supports other tissues. Types include: blood, bone, cartilage, ligament, and adipose tissue.' }]
+                }
+            ],
+            math: [
+                {
+                    icon: '∞', title: 'Number Systems', color: 'var(--pink)', keywords: ['natural numbers', 'whole numbers', 'integers', 'rational', 'irrational', 'real numbers'],
+                    summary: 'Numbers form a hierarchy: Natural → Whole → Integers → Rational → Irrational → Real. Irrational numbers cannot be expressed as p/q (e.g., √2, π). Real numbers include all rational and irrational numbers.',
+                    formulas: ['Rational: p/q form (q≠0)', '√2 ≈ 1.414... (irrational)'],
+                    faqs: [{ q: 'What is an irrational number?', a: 'An irrational number cannot be expressed in the form p/q where p and q are integers and q ≠ 0. Its decimal expansion is non-terminating and non-repeating. Examples: √2, √3, π.' }, { q: 'How do you locate √2 on a number line?', a: 'Draw a right triangle with both legs = 1 unit. By Pythagoras theorem, hypotenuse = √2. Using a compass, mark this length on the number line from origin.' }]
+                },
+                {
+                    icon: '📊', title: 'Polynomials', color: 'var(--blue)', keywords: ['polynomial', 'monomial', 'degree', 'zero', 'coefficient', 'remainder theorem'],
+                    summary: 'A polynomial is an algebraic expression with variables and coefficients. Degree = highest power. Key theorem: (x-a) is a factor of p(x) if and only if p(a) = 0. Remainder Theorem: remainder when p(x) is divided by (x-a) = p(a).',
+                    formulas: ['(a+b)² = a²+2ab+b²', '(a-b)² = a²-2ab+b²', '(a+b)(a-b) = a²-b²', 'a³+b³ = (a+b)(a²-ab+b²)'],
+                    faqs: [{ q: 'What is a zero of a polynomial?', a: 'A zero (or root) of a polynomial p(x) is a value of x for which p(x) = 0. For a linear polynomial ax + b, zero = -b/a.' }, { q: 'State the Factor Theorem.', a: 'If p(a) = 0 for a polynomial p(x), then (x - a) is a factor of p(x), and vice versa. Used to find factors without long division.' }]
+                },
+                {
+                    icon: '📍', title: 'Coordinate Geometry', color: 'var(--cyan)', keywords: ['Cartesian plane', 'x-axis', 'y-axis', 'origin', 'quadrants', 'ordered pair'],
+                    summary: 'The Cartesian coordinate system uses two perpendicular number lines (x and y axes) to locate points. Any point is represented as (x, y). The plane is divided into 4 quadrants. Origin = (0,0).',
+                    formulas: ['Distance = √[(x₂-x₁)² + (y₂-y₁)²]'],
+                    faqs: [{ q: 'What are the four quadrants?', a: 'Q1: (+,+) | Q2: (-,+) | Q3: (-,-) | Q4: (+,-). A point in Q1 has both positive coordinates. Points on axes belong to no quadrant.' }, { q: 'What is the abscissa and ordinate?', a: 'The x-coordinate of a point (horizontal distance from y-axis) is called the abscissa, and the y-coordinate (vertical distance from x-axis) is called the ordinate.' }]
+                },
+                {
+                    icon: '📈', title: 'Linear Equations in Two Variables', color: 'var(--yellow)', keywords: ['linear equation', 'solution', 'graph', 'x-intercept', 'y-intercept'],
+                    summary: 'A linear equation in two variables (ax + by + c = 0) has infinitely many solutions. Each solution is a point on its graph, which is always a straight line. Two equations together = a system with a unique solution (intersection point).',
+                    formulas: ['ax + by + c = 0', 'y = mx + c (slope form)'],
+                    faqs: [{ q: 'How many solutions does a linear equation in 2 variables have?', a: 'A linear equation in two variables has infinitely many solutions. Each solution represents a point on the line, and a line has infinitely many points.' }, { q: 'How do we draw the graph of a linear equation?', a: 'Find at least 2 solution points by substituting values of x and computing y (or vice versa). Plot these points and connect them to get a straight line.' }]
+                },
+                {
+                    icon: '📐', title: 'Triangles', color: 'var(--green)', keywords: ['congruence', 'SAS', 'ASA', 'SSS', 'RHS', 'similarity', 'inequalities'],
+                    summary: 'Two triangles are congruent if they have same shape AND size. Congruence criteria: SSS, SAS, ASA, AAS, RHS. Inequalities: larger angle is opposite longer side; sum of any two sides > third side.',
+                    formulas: ['Sum of angles = 180°', 'Exterior angle = sum of two interior opposite angles'],
+                    faqs: [{ q: 'What are the criteria for congruence of triangles?', a: 'SSS (all 3 sides equal), SAS (2 sides and included angle), ASA (2 angles and included side), AAS (2 angles and non-included side), RHS (right angle, hypotenuse, one side).' }, { q: 'What is the Triangle Inequality Theorem?', a: 'The sum of any two sides of a triangle must be greater than the third side. Also, the difference of any two sides must be less than the third side.' }]
+                }
+            ],
+            sst: [
+                {
+                    icon: '🗽', title: 'The French Revolution', color: 'var(--blue)', keywords: ['liberty', 'equality', 'fraternity', 'Estates', 'Louis XVI', 'Bastille', 'Napoleon'],
+                    summary: 'The French Revolution (1789-1799) ended monarchy and brought democratic ideals. Causes: financial crisis, social inequality (Three Estates), food shortage, Enlightenment ideas. Key events: storming of Bastille, Declaration of Rights, execution of Louis XVI.',
+                    formulas: ['1789: Bastille stormed', '1799: Napoleon takes power'],
+                    faqs: [{ q: 'What were the Three Estates in France?', a: 'First Estate: clergy. Second Estate: nobility. Third Estate: commoners (97% of population) who paid all taxes. This inequality triggered the Revolution.' }, { q: 'What is the significance of the Declaration of the Rights of Man?', a: 'Issued in 1789, it proclaimed liberty, equality, and popular sovereignty. It became a foundation for modern democratic constitutions worldwide.' }]
+                },
+                {
+                    icon: '⚒️', title: 'Socialism in Europe and the Russian Revolution', color: 'var(--pink)', keywords: ['socialism', 'capitalism', 'Marx', 'Lenin', 'Bolshevik', '1917 Revolution', 'Soviet'],
+                    summary: 'Industrialization led to capitalism and worker exploitation, inspiring socialist movements. Marx\'s ideas influenced Lenin\'s Bolshevik party. The 1917 Russian Revolution overthrew the Tsar and established the first socialist state.',
+                    formulas: ['1917: February Revolution (Tsar falls)', '1917: October Revolution (Bolsheviks take power)'],
+                    faqs: [{ q: 'What were Karl Marx\'s ideas?', a: 'Marx believed history is driven by class struggle. Workers (proletariat) are exploited by owners (bourgeoisie). He called for a revolution where workers would own means of production — communism.' }, { q: 'What was the New Economic Policy (NEP)?', a: 'Introduced by Lenin in 1921 to recover from war and famine, NEP allowed some private trade and small enterprises while the state kept control of major industries.' }]
+                }
+            ],
+            english: [
+                {
+                    icon: '📻', title: 'The Fun They Had', color: 'var(--blue)', keywords: ['Isaac Asimov', 'future school', 'mechanical teacher', 'homework', 'Margie', 'Tommy'],
+                    summary: 'Set in the year 2157, Margie and Tommy discover an old book about real schools. Margie\'s mechanical teacher teaches her alone at home. She wonders what the old schools, with real human teachers and classmates, must have been like. The story contrasts technology with human connection.',
+                    formulas: ['Theme: Technology vs Human Connection'],
+                    faqs: [{ q: 'Why was Margie sad about the mechanical teacher?', a: 'Margie was bored with her robotic teacher and learned alone in a room. She was curious about old schools where children sat together and learned, which seemed more fun to her.' }, { q: 'What did Margie and Tommy find?', a: 'They found a real paper book (a very old one) about the old schools. Tommy called it old-fashioned — all books were now on screens that could hold a million books.' }]
+                },
+                {
+                    icon: '🎵', title: 'The Sound of Music', color: 'var(--cyan)', keywords: ['Evelyn Glennie', 'Bismillah Khan', 'shehnai', 'deaf', 'music', 'inspiration'],
+                    summary: 'Two parts: (1) Evelyn Glennie, a deaf percussionist who learned to hear music through vibrations, becoming world-famous. (2) Ustad Bismillah Khan, shehnai maestro who kept Indian classical music alive and was devoted to his art and homeland.',
+                    formulas: ['Message: Disability is not a barrier to greatness'],
+                    faqs: [{ q: 'How did Evelyn Glennie learn music despite being deaf?', a: 'Evelyn learned to hear music through vibrations felt in different parts of her body. She took off her shoes and felt vibrations through the floor, teaching herself to distinguish music through feeling.' }, { q: 'What is the shehnai?', a: 'The shehnai is an Indian wind instrument with a reed at the top. Bismillah Khan was its greatest exponent and played it at the India Gate on Independence Day.' }]
+                }
+            ],
+            hindi: [
+                {
+                    icon: '📜', title: 'Kshitij – Do Bailon Ki Katha', color: 'var(--yellow)', keywords: ['Premchand', 'Heera', 'Moti', 'friendship', 'freedom', 'struggle'],
+                    summary: 'प्रेमचंद की यह कहानी दो बैलों हीरा और मोती की दोस्ती और स्वतंत्रता की चाह के बारे में है। यह मानवीय मूल्यों जैसे मित्रता, स्वाभिमान और संघर्ष को दर्शाती है।',
+                    formulas: ['Theme: मित्रता और स्वाधीनता'],
+                    faqs: [{ q: 'हीरा और मोती कौन हैं?', a: 'हीरा और मोती दो बैल हैं जो एक किसान के पास काम करते हैं। वे बेहद घनिष्ठ मित्र हैं और एक-दूसरे के बिना नहीं रह सकते।' }, { q: 'इस कहानी का मुख्य संदेश क्या है?', a: 'यह कहानी बताती है कि स्वतंत्रता सबसे मूल्यवान है और मित्रता में अपार शक्ति होती है।' }]
+                },
+                {
+                    icon: '🌸', title: 'Kshitij – Raskhan', color: 'var(--pink)', keywords: ['भक्ति', 'कृष्ण', 'गोकुल', 'वृंदावन', 'रसखान', 'सवैया'],
+                    summary: 'रसखान कृष्ण भक्त कवि थे जो कृष्ण की लीलाओं और वृंदावन के प्राकृतिक सौंदर्य का वर्णन करते हैं। उनके सवैया और कवित्त अत्यंत मधुर और भावपूर्ण हैं।',
+                    formulas: ['विधा: सवैया और कवित्त'],
+                    faqs: [{ q: 'रसखान कौन थे?', a: 'रसखान कृष्ण भक्ति शाखा के प्रमुख कवि थे। वे मुस्लिम होते हुए भी कृष्ण के परम भक्त थे। उनकी रचनाएँ ब्रज भाषा में हैं।' }]
+                }
+            ]
+        };
+
+        let currentSubjectData = 'science';
+        let currentModal = null;
+
+        function showSubject(sub, btn) {
+            currentSubjectData = sub;
+            document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderChapters();
+        }
+        function renderChapters() {
+            const grid = document.getElementById('chapterGrid');
+            const data = CHAPTERS_DATA[currentSubjectData] || [];
+            grid.innerHTML = data.map((ch, i) => `
+    <div class="chapter-card" style="--card-color:${ch.color}" onclick="openChapter(${i})">
+      <div class="card-top" style="background:linear-gradient(135deg,${ch.color}22,transparent)">
+        <div>
+          <div class="card-num">Chapter ${i + 1}</div>
+          <div class="card-title">${ch.title}</div>
+        </div>
+        <div class="card-icon">${ch.icon}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-keywords">${ch.keywords.slice(0, 4).map(k => `<span class="kw">${k}</span>`).join('')}</div>
+        <div class="card-actions">
+          <a class="card-btn primary" href="javascript:void(0)" onclick="event.stopPropagation();openChapter(${i})">📖 Summary</a>
+          <a class="card-btn" href="ai-doubt.html" onclick="event.stopPropagation()">🤖 Ask AI</a>
+        </div>
+      </div>
+    </div>`).join('');
+        }
+        function openChapter(i) {
+            const ch = CHAPTERS_DATA[currentSubjectData][i];
+            if (!ch) return;
+            document.getElementById('modalHeader').innerHTML = `
+    <div>
+      <div style="font-size:0.75rem;color:rgba(240,244,255,0.4);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Chapter ${i + 1}</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;display:flex;align-items:center;gap:12px;">${ch.icon} ${ch.title}</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()">✕</button>`;
+            document.getElementById('modalBody').innerHTML = `
+    <div class="summary-section">
+      <div class="section-label">📝 Chapter Summary</div>
+      <div class="summary-text">${ch.summary}</div>
+    </div>
+    <div class="summary-section">
+      <div class="section-label">🔢 Key Formulas</div>
+      ${ch.formulas.map(f => `<div class="formula-box">📌 ${f}</div>`).join('')}
+    </div>
+    <div class="summary-section">
+      <div class="section-label">🏷️ Important Keywords</div>
+      <div class="kw-list">${ch.keywords.map(k => `<span class="kw-full">${k}</span>`).join('')}</div>
+    </div>
+    <div class="summary-section">
+      <div class="section-label">❓ Frequently Asked Questions</div>
+      ${ch.faqs.map((faq, fi) => `
+        <div class="faq-item" id="faq${fi}">
+          <div class="faq-q" onclick="toggleFaq(${fi})">${faq.q}<span id="faqArrow${fi}">▼</span></div>
+          <div class="faq-a">${faq.a}</div>
+        </div>`).join('')}
+    </div>`;
+            document.getElementById('modalFooter').innerHTML = `
+    <a class="mf-btn mf-primary" href="ai-doubt.html">🤖 Ask AI About This Chapter</a>
+    <button class="mf-btn mf-ghost" onclick="bookmarkChapter('${ch.title}')">🔖 Bookmark</button>
+    <button class="mf-btn mf-ghost" onclick="markDone('${ch.title}')">✅ Mark as Done</button>`;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+        function toggleFaq(i) {
+            const item = document.getElementById('faq' + i);
+            const arrow = document.getElementById('faqArrow' + i);
+            item.classList.toggle('open');
+            arrow.textContent = item.classList.contains('open') ? '▲' : '▼';
+        }
+        function closeModal(e) {
+            if (!e || e.target === document.getElementById('modalOverlay')) {
+                document.getElementById('modalOverlay').classList.remove('open');
+            }
+        }
+        function bookmarkChapter(title) {
+            const bookmarks = JSON.parse(localStorage.getItem('avanify_bookmarks') || '[]');
+            if (!bookmarks.includes(title)) { bookmarks.push(title); localStorage.setItem('avanify_bookmarks', JSON.stringify(bookmarks)); alert(`✅ "${title}" bookmarked! View in Dashboard.`); }
+            else { alert(`"${title}" is already bookmarked!`); }
+        }
+        function markDone(title) {
+            const done = JSON.parse(localStorage.getItem('avanify_done') || '[]');
+            if (!done.includes(title)) { done.push(title); localStorage.setItem('avanify_done', JSON.stringify(done)); alert(`✅ "${title}" marked as complete! Great work!`); }
+            else { alert(`"${title}" is already marked as done!`); }
+        }
+        // Check URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const subParam = urlParams.get('subject');
+        if (subParam && CHAPTERS_DATA[subParam]) {
+            currentSubjectData = subParam;
+            document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+            const idx = { science: 0, math: 1, sst: 2, english: 3, hindi: 4 }[subParam] || 0;
+            document.querySelectorAll('.stab')[idx]?.classList.add('active');
+        }
+        renderChapters();
+        // Close modal on Escape
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+
+</html>

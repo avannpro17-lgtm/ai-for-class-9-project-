@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Avanify AI - Class 9 Doubt Solver</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --card: #10182b;
+            --blue: #1a6bff;
+            --cyan: #00d4ff;
+            --green: #00e887;
+            --yellow: #ffe040;
+            --pink: #ff4faf;
+            --white: #f1f5ff;
+            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* TOPBAR */
+
+        .topbar {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo span {
+            -webkit-text-fill-color: var(--yellow);
+        }
+
+        .top-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .top-links a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .top-links a:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 270px;
+            background: rgba(255, 255, 255, 0.02);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+
+        .side-title {
+            padding: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .subject-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 14px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            text-align: left;
+        }
+
+        .subject-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .subject-btn.active {
+            background: rgba(26, 107, 255, 0.15);
+            border-right: 3px solid var(--blue);
+            color: white;
+        }
+
+        .chapter-list {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chapter {
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.85rem;
+            transition: 0.2s;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .chapter:hover {
+            background: rgba(26, 107, 255, 0.12);
+            color: white;
+        }
+
+        /* CHAT */
+
+        .chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .context {
+            background: rgba(26, 107, 255, 0.15);
+            color: var(--cyan);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* WELCOME */
+
+        .welcome {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .welcome h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 14px;
+        }
+
+        .welcome p {
+            max-width: 500px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .quick {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .quick button {
+            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .quick button:hover {
+            background: rgba(26, 107, 255, 0.15);
+        }
+
+        /* MESSAGE */
+
+        .msg {
+            display: flex;
+            gap: 12px;
+        }
+
+        .msg.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .ai-avatar {
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, var(--yellow), var(--green));
+            color: black;
+            font-weight: 700;
+        }
+
+        .bubble {
+            max-width: 75%;
+            padding: 16px;
+            border-radius: 18px;
+            line-height: 1.7;
+            font-size: 0.92rem;
+        }
+
+        .ai-bubble {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            color: white;
+        }
+
+        .formula {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 8px;
+            margin: 4px 0;
+            color: var(--cyan);
+            font-family: monospace;
+        }
+
+        /* INPUT */
+
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .input-wrap {
+            display: flex;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        textarea {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            resize: none;
+            color: white;
+            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+            height: 24px;
+            max-height: 120px;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .send-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            cursor: pointer;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        @media(max-width:768px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .bubble {
+                max-width: 90%;
+            }
+
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 5%;
+            background: rgba(10, 14, 26, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--yellow);
+            -webkit-text-fill-color: var(--yellow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(240, 244, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--cyan);
+            border-radius: 2px;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .btn-nav {
+            padding: 8px 22px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--blue), var(--electric));
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(26, 107, 255, 0.4);
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(26, 107, 255, 0.5);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 5% 60px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 28px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--cyan);
+            animation: fadeUp 0.8s ease 0.2s both;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            animation: fadeUp 0.8s ease 0.4s both;
+            max-width: 900px;
+        }
+
+        h1 .line1 {
+            display: block;
+        }
+
+        h1 .hl {
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--pink) 50%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: gradient-flow 4s linear infinite;
+        }
+
+        @keyframes gradient-flow {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .hero-sub {
+            margin-top: 20px;
+            max-width: 600px;
+            font-size: 1.1rem;
+            color: rgba(240, 244, 255, 0.6);
+            line-height: 1.7;
+            animation: fadeUp 0.8s ease 0.6s both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-cta {
+            margin-top: 40px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeUp 0.8s ease 0.8s both;
+        }
+
+        .btn-primary {
+            padding: 14px 36px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 6px 30px rgba(26, 107, 255, 0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(26, 107, 255, 0.6);
+        }
+
+        .btn-secondary {
+            padding: 14px 36px;
+            border-radius: 50px;
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: border-color 0.2s, background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--yellow);
+            background: rgba(255, 224, 64, 0.08);
+        }
+
+        /* ─── STATS ─── */
+        .stats-row {
+            display: flex;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeUp 0.8s ease 1s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--yellow), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(240, 244, 255, 0.5);
+            margin-top: 2px;
+        }
+
+        /* ─── FLOATING CARDS ─── */
+        .hero-visual {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 60px auto 0;
+            height: 200px;
+            animation: fadeUp 0.8s ease 1.2s both;
+        }
+
+        .float-card {
+            position: absolute;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .float-card.c1 {
+            top: 0;
+            left: 5%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .float-card.c2 {
+            top: 20px;
+            right: 5%;
+            animation: float 4s ease-in-out infinite 1.5s;
+        }
+
+        .float-card.c3 {
+            bottom: 0;
+            left: 25%;
+            animation: float 4s ease-in-out infinite 0.8s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .card-icon {
+            font-size: 1.6rem;
+        }
+
+        .card-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            color: var(--cyan);
+            background: rgba(0, 212, 255, 0.15);
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-top: 2px;
+        }
+
+        /* ─── FEATURES ─── */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .tag-blue {
+            background: rgba(26, 107, 255, 0.2);
+            color: var(--electric);
+        }
+
+        .tag-yellow {
+            background: rgba(255, 224, 64, 0.2);
+            color: var(--yellow);
+        }
+
+        .tag-green {
+            background: rgba(0, 232, 135, 0.2);
+            color: var(--green);
+        }
+
+        .tag-pink {
+            background: rgba(255, 79, 175, 0.2);
+            color: var(--pink);
+        }
+
+        h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="mobile-menu" id="mobileMenu">
+        <span class="close-menu" onclick="toggleMenu()">✕</span>
+        <a href="index.html" onclick="toggleMenu()">Home</a>
+        <a href="chapters.html" onclick="toggleMenu()">Subjects</a>
+        <a href="ai-doubt.html" onclick="toggleMenu()">AI Doubt Solver</a>
+        <a href="booking.html" onclick="toggleMenu()">Book Tutor</a>
+        <a href="login.html" onclick="toggleMenu()">Login</a>
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">Avani<span>fy</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="chapters.html">Subjects</a></li>
+            <li><a href="ai-doubt.html">AI Doubt Solver</a></li>
+            <li><a href="booking.html">Book Tutor</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <a href="login.html" class="btn-nav">Get Started →</a>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- SIDEBAR -->
+
+        <div class="sidebar">
+
+            <div class="side-title">
+                Subjects
+            </div>
+
+            <button class="subject-btn active">
+                🔬 Science
+            </button>
+
+            <button class="subject-btn">
+                📐 Mathematics
+            </button>
+
+            <button class="subject-btn">
+                🌍 Social Science
+            </button>
+
+            <button class="subject-btn">
+                📖 English
+            </button>
+
+            <button class="subject-btn">
+                📜 Hindi
+            </button>
+
+            <div class="side-title">
+                Science Chapters
+            </div>
+
+            <div class="chapter-list">
+
+                <div class="chapter">Motion</div>
+                <div class="chapter">Force & Laws of Motion</div>
+                <div class="chapter">Gravitation</div>
+                <div class="chapter">Work & Energy</div>
+                <div class="chapter">Sound</div>
+                <div class="chapter">Atoms & Molecules</div>
+                <div class="chapter">Structure of Atom</div>
+                <div class="chapter">Tissues</div>
+                <div class="chapter">Why Do We Fall Ill</div>
+
+            </div>
+
+        </div>
+
+        <!-- CHAT -->
+
+        <div class="chat">
+
+            <div class="chat-header">
+
+                <div class="context">
+                    🔬 Science AI Tutor
+                </div>
+
+            </div>
+
+            <div class="messages" id="messages">
+
+                <div class="welcome" id="welcome">
+
+                    <h1>🤖 Welcome to Avanify AI</h1>
+
+                    <p>
+                        Ask doubts from Class 9 NCERT chapters and get instant explanations, formulas, examples and
+                        summaries in simple language.
+                    </p>
+
+                    <div class="quick">
+
+                        <button onclick="askQuestion('What is motion?')">
+                            What is Motion?
+                        </button>
+
+                        <button onclick="askQuestion('Explain Newton laws')">
+                            Newton Laws
+                        </button>
+
+                        <button onclick="askQuestion('What is photosynthesis?')">
+                            Photosynthesis
+                        </button>
+
+                        <button onclick="askQuestion('Explain gravitation')">
+                            Gravitation
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="input-area">
+
+                <div class="input-wrap">
+
+                    <textarea id="input" placeholder="Ask your doubt here..." onkeydown="handleKey(event)"></textarea>
+
+                    <button class="send-btn" onclick="sendMessage()">
+                        ➤
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        // ======================================================
+        // KNOWLEDGE DATABASE
+        // ======================================================
+
+        const SCIENCE_DATA = {
+
+            motion: {
+
+                keywords: [
+                    "motion",
+                    "movement",
+                    "movment",
+                    "speed",
+                    "velocity",
+                    "acceleration",
+                    "distance",
+                    "displacement"
+                ],
+
+                answer: `
+
+<h3>🚀 Motion</h3>
+
+<b>Definition:</b><br>
+Motion means change in position of an object with time.
+
+<br><br>
+
+<b>Main Types:</b>
+
+<ul>
+<li>Uniform Motion</li>
+<li>Non-uniform Motion</li>
+</ul>
+
+<b>Important Terms:</b>
+
+<ul>
+<li><b>Distance:</b> Total path travelled.</li>
+<li><b>Displacement:</b> Shortest path.</li>
+<li><b>Speed:</b> Distance travelled per unit time.</li>
+<li><b>Velocity:</b> Displacement per unit time.</li>
+<li><b>Acceleration:</b> Change in velocity.</li>
+</ul>
+
+<b>Formulas:</b>
+
+<br><br>
+
+<div class="formula">
+Speed = Distance / Time
+</div>
+
+<div class="formula">
+Velocity = Displacement / Time
+</div>
+
+<div class="formula">
+Acceleration = Change in Velocity / Time
+</div>
+
+<br>
+
+<b>Examples:</b>
+
+<ul>
+<li>Moving car</li>
+<li>Flying bird</li>
+<li>Running athlete</li>
+</ul>
+
+`
+
+            },
+
+            newton: {
+
+                keywords: [
+                    "newton",
+                    "laws of motion",
+                    "force",
+                    "inertia",
+                    "momentum",
+                    "f=ma",
+                    "first law",
+                    "second law",
+                    "third law"
+                ],
+
+                answer: `
+
+<h3>⚡ Newton's Laws of Motion</h3>
+
+<b>First Law:</b><br>
+An object remains at rest or motion unless acted upon by force.
+
+<br><br>
+
+<b>Second Law:</b>
+
+<div class="formula">
+F = ma
+</div>
+
+<br>
+
+<b>Third Law:</b><br>
+Every action has equal and opposite reaction.
+
+<br><br>
+
+<b>Examples:</b>
+
+<ul>
+<li>Gun recoil</li>
+<li>Walking</li>
+<li>Swimming</li>
+</ul>
+
+`
+
+            },
+
+            gravitation: {
+
+                keywords: [
+                    "gravity",
+                    "gravitation",
+                    "mass",
+                    "weight",
+                    "pressure",
+                    "free fall"
+                ],
+
+                answer: `
+
+<h3>🌍 Gravitation</h3>
+
+<b>Definition:</b><br>
+Every object attracts every other object.
+
+<br><br>
+
+<div class="formula">
+F = G(m₁m₂/r²)
+</div>
+
+<br>
+
+<b>Important Concepts:</b>
+
+<ul>
+<li>Mass</li>
+<li>Weight</li>
+<li>Pressure</li>
+<li>Free Fall</li>
+</ul>
+
+<div class="formula">
+Pressure = Force / Area
+</div>
+
+`
+
+            },
+
+            photosynthesis: {
+
+                keywords: [
+                    "photosynthesis",
+                    "plants",
+                    "chlorophyll",
+                    "sunlight",
+                    "oxygen",
+                    "co2"
+                ],
+
+                answer: `
+
+<h3>🌿 Photosynthesis</h3>
+
+<b>Definition:</b><br>
+Plants prepare food using sunlight.
+
+<br><br>
+
+<div class="formula">
+6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂
+</div>
+
+<br>
+
+<b>Requirements:</b>
+
+<ul>
+<li>Sunlight</li>
+<li>Water</li>
+<li>Carbon dioxide</li>
+<li>Chlorophyll</li>
+</ul>
+
+`
+
+            }
+
+        };
+
+        // ======================================================
+        // MESSAGE FUNCTIONS
+        // ======================================================
+
+        function addMessage(role, text) {
+
+            const welcome = document.getElementById('welcome');
+
+            if (welcome) {
+                welcome.remove();
+            }
+
+            const messages = document.getElementById('messages');
+
+            const div = document.createElement('div');
+
+            div.className = `msg ${role}`;
+
+            div.innerHTML = `
+
+<div class="avatar ${role === 'user' ? 'user-avatar' : 'ai-avatar'}">
+${role === 'user' ? 'Y' : '🤖'}
+</div>
+
+<div class="bubble ${role === 'user' ? 'user-bubble' : 'ai-bubble'}">
+${text}
+</div>
+
+`;
+
+            messages.appendChild(div);
+
+            messages.scrollTop = messages.scrollHeight;
+
+        }
+
+        // ======================================================
+        // TEXT NORMALIZER
+        // ======================================================
+
+        function normalize(text) {
+
+            return text
+                .toLowerCase()
+                .replace(/[^\w\s]/gi, '')
+                .trim();
+
+        }
+
+        // ======================================================
+        // SEARCH ENGINE
+        // ======================================================
+
+        function searchKnowledge(question) {
+
+            question = normalize(question);
+
+            let bestMatch = null;
+            let highestScore = 0;
+
+            for (const topic in SCIENCE_DATA) {
+
+                const data = SCIENCE_DATA[topic];
+
+                let score = 0;
+
+                data.keywords.forEach(keyword => {
+
+                    keyword = normalize(keyword);
+
+                    if (question.includes(keyword)) {
+                        score += 5;
+                    }
+
+                    if (question.includes(keyword.substring(0, 4))) {
+                        score += 2;
+                    }
+
+                });
+
+                if (score > highestScore) {
+
+                    highestScore = score;
+                    bestMatch = data;
+
+                }
+
+            }
+
+            return bestMatch;
+
+        }
+
+        // ======================================================
+        // SEND MESSAGE
+        // ======================================================
+
+        function sendMessage() {
+
+            const input = document.getElementById('input');
+
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            input.value = '';
+
+            addMessage('user', text);
+
+            setTimeout(() => {
+
+                const result = searchKnowledge(text);
+
+                if (result) {
+
+                    addMessage('ai', result.answer);
+
+                } else {
+
+                    addMessage('ai', `
+
+<h3>🤖 Avanify AI</h3>
+
+Sorry, I could not fully understand your question.
+
+<br><br>
+
+Try asking about:
+
+<ul>
+<li>Motion</li>
+<li>Newton Laws</li>
+<li>Gravitation</li>
+<li>Photosynthesis</li>
+</ul>
+
+`);
+
+                }
+
+            }, 700);
+
+        }
+
+        // ======================================================
+        // QUICK QUESTIONS
+        // ======================================================
+
+        function askQuestion(q) {
+
+            document.getElementById('input').value = q;
+
+            sendMessage();
+
+        }
+
+        // ======================================================
+        // ENTER KEY
+        // ======================================================
+
+        function handleKey(e) {
+
+            if (e.key === "Enter" && !e.shiftKey) {
+
+                e.preventDefault();
+
+                sendMessage();
+
+            }
+
+        }
+
+
+        // ======================================================
+        // MATHEMATICS DATABASE
+        // ======================================================
+
+        const MATHS_DATA = {
+
+            pythagoras: {
+
+                keywords: [
+                    "pythagoras",
+                    "pythagorean",
+                    "triangle theorem",
+                    "hypotenuse",
+                    "right triangle",
+                    "a2+b2",
+                    "pitagoras"
+                ],
+
+                answer: `
+
+<h3>📐 Pythagoras Theorem</h3>
+
+<b>Statement:</b><br>
+
+In a right triangle:
+
+<div class="formula">
+a² + b² = c²
+</div>
+
+<br>
+
+Where:
+
+<ul>
+<li>a = perpendicular</li>
+<li>b = base</li>
+<li>c = hypotenuse</li>
+</ul>
+
+<b>Example:</b>
+
+<div class="formula">
+3² + 4² = 5²
+</div>
+
+<br>
+
+<b>Applications:</b>
+
+<ul>
+<li>Construction</li>
+<li>Architecture</li>
+<li>Distance calculation</li>
+</ul>
+
+`
+
+            },
+
+            numberSystem: {
+
+                keywords: [
+                    "irrational",
+                    "rational",
+                    "real numbers",
+                    "integers",
+                    "whole numbers",
+                    "natural numbers",
+                    "number system"
+                ],
+
+                answer: `
+
+<h3>🔢 Number System</h3>
+
+<b>Main Types:</b>
+
+<ul>
+<li>Natural Numbers → 1,2,3...</li>
+<li>Whole Numbers → 0,1,2...</li>
+<li>Integers → -2,-1,0,1...</li>
+<li>Rational Numbers → p/q form</li>
+<li>Irrational Numbers → cannot be written in p/q form</li>
+</ul>
+
+<b>Examples of Irrational Numbers:</b>
+
+<ul>
+<li>√2</li>
+<li>π</li>
+<li>√5</li>
+</ul>
+
+<b>Important Point:</b><br>
+
+Decimal expansion of irrational numbers is non-terminating and non-repeating.
+
+`
+
+            },
+
+            coordinateGeometry: {
+
+                keywords: [
+                    "coordinate geometry",
+                    "x axis",
+                    "y axis",
+                    "origin",
+                    "quadrant",
+                    "cartesian plane"
+                ],
+
+                answer: `
+
+<h3>📊 Coordinate Geometry</h3>
+
+<b>Cartesian Plane:</b><br>
+
+A plane formed by X-axis and Y-axis.
+
+<br><br>
+
+<b>Main Terms:</b>
+
+<ul>
+<li>X-axis → horizontal line</li>
+<li>Y-axis → vertical line</li>
+<li>Origin → point (0,0)</li>
+<li>Quadrants → four regions</li>
+</ul>
+
+<b>Quadrants:</b>
+
+<ul>
+<li>1st → (+,+)</li>
+<li>2nd → (-,+)</li>
+<li>3rd → (-,-)</li>
+<li>4th → (+,-)</li>
+</ul>
+
+`
+
+            },
+
+            heronsFormula: {
+
+                keywords: [
+                    "heron",
+                    "herons formula",
+                    "triangle area",
+                    "semi perimeter"
+                ],
+
+                answer: `
+
+<h3>📏 Heron's Formula</h3>
+
+<b>Used to find area of triangle.</b>
+
+<br><br>
+
+<div class="formula">
+Area = √[s(s-a)(s-b)(s-c)]
+</div>
+
+<br>
+
+Where:
+
+<div class="formula">
+s = (a+b+c)/2
+</div>
+
+<br>
+
+<b>s is called semi-perimeter.</b>
+
+`
+
+            }
+
+        };
+
+        // ======================================================
+        // SOCIAL SCIENCE DATABASE
+        // ======================================================
+
+        const SST_DATA = {
+
+            frenchRevolution: {
+
+                keywords: [
+                    "french revolution",
+                    "bastille",
+                    "louis xvi",
+                    "marie antoinette",
+                    "jacobin",
+                    "robespierre",
+                    "revolution france"
+                ],
+
+                answer: `
+
+<h3>🇫🇷 French Revolution</h3>
+
+<b>Started:</b> 1789
+
+<br><br>
+
+<b>Main Causes:</b>
+
+<ul>
+<li>Heavy taxes</li>
+<li>Poverty</li>
+<li>Unfair monarchy</li>
+<li>Food shortage</li>
+</ul>
+
+<b>Important Events:</b>
+
+<ul>
+<li>Storming of Bastille</li>
+<li>Execution of Louis XVI</li>
+<li>Rise of Jacobins</li>
+</ul>
+
+<b>Results:</b>
+
+<ul>
+<li>End of monarchy</li>
+<li>Rise of democracy</li>
+<li>Equality and liberty ideas spread</li>
+</ul>
+
+`
+
+            },
+
+            nazism: {
+
+                keywords: [
+                    "hitler",
+                    "nazism",
+                    "nazi",
+                    "germany",
+                    "world war",
+                    "dictatorship"
+                ],
+
+                answer: `
+
+<h3>⚠️ Nazism and Hitler</h3>
+
+<b>Leader:</b> Adolf Hitler
+
+<br><br>
+
+<b>Main Ideas:</b>
+
+<ul>
+<li>Extreme nationalism</li>
+<li>Dictatorship</li>
+<li>Military power</li>
+<li>Hatred against Jews</li>
+</ul>
+
+<b>Important Points:</b>
+
+<ul>
+<li>Hitler became Chancellor in 1933</li>
+<li>Started World War II</li>
+<li>Millions of Jews killed in Holocaust</li>
+</ul>
+
+`
+
+            },
+
+            democracy: {
+
+                keywords: [
+                    "democracy",
+                    "constitution",
+                    "rights",
+                    "parliament",
+                    "elections",
+                    "government"
+                ],
+
+                answer: `
+
+<h3>🗳️ Democracy</h3>
+
+<b>Definition:</b><br>
+
+Government elected by people.
+
+<br><br>
+
+<b>Main Features:</b>
+
+<ul>
+<li>Free elections</li>
+<li>Rights of citizens</li>
+<li>Rule of law</li>
+<li>Equality</li>
+</ul>
+
+<b>Important Institutions:</b>
+
+<ul>
+<li>Parliament</li>
+<li>Judiciary</li>
+<li>Executive</li>
+</ul>
+
+`
+
+            }
+
+        };
+
+        // ======================================================
+        // ENGLISH DATABASE
+        // ======================================================
+
+        const ENGLISH_DATA = {
+
+            funTheyHad: {
+
+                keywords: [
+                    "fun they had",
+                    "margie",
+                    "tommy",
+                    "robot teacher",
+                    "future school"
+                ],
+
+                answer: `
+
+<h3>📖 The Fun They Had</h3>
+
+<b>Author:</b> Isaac Asimov
+
+<br><br>
+
+<b>Main Characters:</b>
+
+<ul>
+<li>Margie</li>
+<li>Tommy</li>
+</ul>
+
+<b>Theme:</b><br>
+
+Difference between old schools and future robotic education.
+
+<br><br>
+
+<b>Main Idea:</b><br>
+
+Children in future study through mechanical teachers at home.
+
+`
+
+            },
+
+            beautifulMind: {
+
+                keywords: [
+                    "beautiful mind",
+                    "einstein",
+                    "albert einstein",
+                    "scientist"
+                ],
+
+                answer: `
+
+<h3>🧠 A Truly Beautiful Mind</h3>
+
+<b>Main Character:</b> Albert Einstein
+
+<br><br>
+
+<b>Important Points:</b>
+
+<ul>
+<li>Great scientist</li>
+<li>Developed Theory of Relativity</li>
+<li>Won Nobel Prize</li>
+<li>Believed in peace and humanity</li>
+</ul>
+
+`
+
+            }
+
+        };
+
+        // ======================================================
+        // ADVANCED SEARCH ENGINE
+        // ======================================================
+
+        function searchAllSubjects(question) {
+
+            const databases = [
+                SCIENCE_DATA,
+                MATHS_DATA,
+                SST_DATA,
+                ENGLISH_DATA
+            ];
+
+            question = normalize(question);
+
+            let bestMatch = null;
+            let highestScore = 0;
+
+            databases.forEach(database => {
+
+                for (const topic in database) {
+
+                    const data = database[topic];
+
+                    let score = 0;
+
+                    data.keywords.forEach(keyword => {
+
+                        keyword = normalize(keyword);
+
+                        if (question.includes(keyword)) {
+                            score += 5;
+                        }
+
+                        if (question.includes(keyword.substring(0, 4))) {
+                            score += 2;
+                        }
+
+                    });
+
+                    if (score > highestScore) {
+
+                        highestScore = score;
+                        bestMatch = data;
+
+                    }
+
+                }
+
+            });
+
+            return bestMatch;
+
+        }
+
+        // ======================================================
+        // UPDATED SEND MESSAGE
+        // REPLACE OLD sendMessage FUNCTION WITH THIS
+        // ======================================================
+
+        function sendMessage() {
+
+            const input = document.getElementById('input');
+
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            input.value = '';
+
+            addMessage('user', text);
+
+            setTimeout(() => {
+
+                const result = searchAllSubjects(text);
+
+                if (result) {
+
+                    addMessage('ai', result.answer);
+
+                } else {
+
+                    addMessage('ai', `
+
+<h3>🤖 Avanify AI</h3>
+
+Sorry, I could not understand your question fully.
+
+<br><br>
+
+You can ask questions from:
+
+<ul>
+<li>Science</li>
+<li>Mathematics</li>
+<li>Social Science</li>
+<li>English</li>
+</ul>
+
+`);
+
+                }
+
+            }, 700);
+
+        }
+
+        // ======================================================
+        // QUIZ GENERATOR
+        // ======================================================
+
+        function generateQuiz(topic) {
+
+            const quizzes = {
+
+                motion: `
+<h3>📝 Motion Quiz</h3>
+
+1. SI unit of speed?<br>
+<b>Answer:</b> m/s
+
+<br><br>
+
+2. Velocity is scalar or vector?<br>
+<b>Answer:</b> Vector
+
+<br><br>
+
+3. Formula of acceleration?<br>
+<b>Answer:</b>
+
+<div class="formula">
+Acceleration = Change in Velocity / Time
+</div>
+`,
+
+                newton: `
+<h3>📝 Newton Laws Quiz</h3>
+
+1. Formula of force?<br>
+<b>Answer:</b>
+
+<div class="formula">
+F = ma
+</div>
+
+<br>
+
+2. Which law is called law of inertia?<br>
+<b>Answer:</b> First law
+
+`
+            };
+
+            return quizzes[topic] || "<h3>No quiz available yet.</h3>";
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
