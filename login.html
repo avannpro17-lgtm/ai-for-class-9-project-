@@ -605,83 +605,336 @@
         </div>
     </div>
 
-    <script>
-        function showTab(tab) {
+    <!-- FIREBASE SDK -->
+
+    <script type="module">
+
+        // ============================================
+        // FIREBASE IMPORTS
+        // ============================================
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            sendPasswordResetEmail,
+            GoogleAuthProvider,
+            signInWithPopup
+        }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        import {
+            getFirestore,
+            doc,
+            setDoc
+        }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // ============================================
+        // FIREBASE CONFIG
+        // ============================================
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyAc0OnkbXldasGy3lZGMQZ4F3anZl6UbjA",
+
+            authDomain: "avanify-c6de9.firebaseapp.com",
+
+            projectId: "avanify-c6de9",
+
+            storageBucket: "avanify-c6de9.firebasestorage.app",
+
+            messagingSenderId: "426785834912",
+
+            appId: "1:426785834912:web:6dda309e07c6b70b6686c5",
+
+            measurementId: "G-FWNXQBGCY7"
+
+        };
+
+        // ============================================
+        // INITIALIZE FIREBASE
+        // ============================================
+
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+
+        const db = getFirestore(app);
+
+        // ============================================
+        // TAB FUNCTIONS
+        // ============================================
+
+        window.showTab = function (tab) {
+
             document.getElementById('loginForm').style.display = 'none';
+
             document.getElementById('signupForm').style.display = 'none';
+
             document.getElementById('forgotForm').style.display = 'none';
+
             document.getElementById(tab + 'Form').style.display = 'block';
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if (tab === 'login') document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            if (tab === 'signup') document.querySelectorAll('.tab-btn')[1].classList.add('active');
+
+            document.querySelectorAll('.tab-btn')
+                .forEach(b => b.classList.remove('active'));
+
+            if (tab === 'login') {
+                document.querySelectorAll('.tab-btn')[0]
+                    .classList.add('active');
+            }
+
+            if (tab === 'signup') {
+                document.querySelectorAll('.tab-btn')[1]
+                    .classList.add('active');
+            }
+
         }
-        function showForgot() {
+
+        // ============================================
+        // FORGOT PASSWORD
+        // ============================================
+
+        window.showForgot = function () {
+
             document.getElementById('loginForm').style.display = 'none';
+
             document.getElementById('forgotForm').style.display = 'block';
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
         }
-        function toggleChip(el) { el.classList.toggle('selected'); }
-        function checkStrength(val) {
-            const bar = document.getElementById('strengthBar');
+
+        // ============================================
+        // SUBJECT CHIPS
+        // ============================================
+
+        window.toggleChip = function (el) {
+
+            el.classList.toggle('selected');
+
+        }
+
+        // ============================================
+        // PASSWORD STRENGTH
+        // ============================================
+
+        window.checkStrength = function (val) {
+
+            const bar =
+                document.getElementById('strengthBar');
+
             let score = 0;
+
             if (val.length > 6) score++;
             if (val.length > 10) score++;
             if (/[A-Z]/.test(val)) score++;
             if (/[0-9]/.test(val)) score++;
             if (/[^A-Za-z0-9]/.test(val)) score++;
+
             const pct = [0, 20, 40, 65, 85, 100][score];
-            const colors = ['', '#ff4faf', '#ff8c00', '#ffe040', '#00d4ff', '#00e887'][score];
-            bar.style.width = pct + '%'; bar.style.background = colors;
+
+            const colors = [
+                '',
+                '#ff4faf',
+                '#ff8c00',
+                '#ffe040',
+                '#00d4ff',
+                '#00e887'
+            ][score];
+
+            bar.style.width = pct + '%';
+
+            bar.style.background = colors;
+
         }
-        function handleLogin() {
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPass').value;
-            const errEl = document.getElementById('loginError');
-            if (!email || !pass) { errEl.style.display = 'block'; errEl.textContent = 'Please fill in all fields.'; return; }
-            const btn = document.querySelector('#loginForm .btn-submit');
-            btn.textContent = 'Logging in...'; btn.disabled = true;
-            // Simulate auth – check localStorage
-            const users = JSON.parse(localStorage.getItem('avanify_users') || '[]');
-            const found = users.find(u => u.email === email && u.password === pass);
-            setTimeout(() => {
-                if (found || email === 'demo@avanify.in' && pass === 'demo123') {
-                    const user = found || { name: 'Demo Student', email };
-                    localStorage.setItem('avanify_current', JSON.stringify(user));
-                    window.location.href = 'dashboard.html';
-                } else {
-                    errEl.style.display = 'block'; errEl.textContent = 'Invalid credentials. Try demo@avanify.in / demo123';
-                    btn.textContent = 'Login to Avanify →'; btn.disabled = false;
-                }
-            }, 1200);
+
+        // ============================================
+        // SIGNUP
+        // ============================================
+
+        window.handleSignup = async function () {
+
+            const name =
+                document.getElementById('signupName')
+                    .value.trim();
+
+            const email =
+                document.getElementById('signupEmail')
+                    .value.trim().toLowerCase();
+
+            const pass =
+                document.getElementById('signupPass')
+                    .value.trim();
+
+            const errEl =
+                document.getElementById('signupError');
+
+            if (!name || !email || !pass) {
+
+                errEl.style.display = 'block';
+
+                errEl.textContent =
+                    'Please fill all required fields.';
+
+                return;
+
+            }
+
+            try {
+
+                const userCredential =
+                    await createUserWithEmailAndPassword(
+                        auth,
+                        email,
+                        pass
+                    );
+
+                const user = userCredential.user;
+
+                // SAVE USER DATA
+
+                await setDoc(doc(db, "users", user.uid), {
+
+                    name,
+                    email,
+
+                    class: "9",
+
+                    xp: 0,
+
+                    coins: 50,
+
+                    createdAt: new Date()
+
+                });
+
+                // SAVE SESSION
+
+                localStorage.setItem(
+                    'avanify_current',
+                    JSON.stringify({
+                        name,
+                        email
+                    })
+                );
+
+                // REDIRECT
+
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+
+                errEl.style.display = 'block';
+
+                errEl.textContent = error.message;
+
+            }
+
         }
-        function handleSignup() {
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const pass = document.getElementById('signupPass').value;
-            const errEl = document.getElementById('signupError');
-            if (!name || !email || !pass) { errEl.style.display = 'block'; errEl.textContent = 'Please fill all required fields.'; return; }
-            if (pass.length < 6) { errEl.style.display = 'block'; errEl.textContent = 'Password must be at least 6 characters.'; return; }
-            const users = JSON.parse(localStorage.getItem('avanify_users') || '[]');
-            users.push({ name, email, password: pass, createdAt: new Date().toISOString() });
-            localStorage.setItem('avanify_users', JSON.stringify(users));
-            localStorage.setItem('avanify_current', JSON.stringify({ name, email }));
-            const btn = document.querySelector('#signupForm .btn-submit');
-            btn.textContent = 'Creating account...'; btn.disabled = true;
-            setTimeout(() => window.location.href = 'dashboard.html', 1000);
+
+        // ============================================
+        // LOGIN
+        // ============================================
+
+        window.handleLogin = async function () {
+
+            const email =
+                document.getElementById('loginEmail')
+                    .value.trim().toLowerCase();
+
+            const pass =
+                document.getElementById('loginPass')
+                    .value.trim();
+
+            const errEl =
+                document.getElementById('loginError');
+
+            try {
+
+                const userCredential =
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        pass
+                    );
+
+                const user = userCredential.user;
+
+                localStorage.setItem(
+                    'avanify_current',
+                    JSON.stringify({
+                        email: user.email
+                    })
+                );
+
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+
+                errEl.style.display = 'block';
+
+                errEl.textContent =
+                    'Invalid email or password.';
+
+            }
+
         }
-        function handleForgot() {
-            const email = document.getElementById('forgotEmail').value;
+
+        // ============================================
+        // FORGOT PASSWORD
+        // ============================================
+
+        window.handleForgot = async function () {
+
+            const email =
+                document.getElementById('forgotEmail')
+                    .value.trim();
+
             if (!email) return;
-            const btn = document.querySelector('#forgotForm .btn-submit');
-            btn.textContent = 'Sending...'; btn.disabled = true;
-            setTimeout(() => {
-                document.getElementById('forgotSuccess').style.display = 'block';
-                btn.textContent = 'Send Reset Link →'; btn.disabled = false;
-            }, 1500);
+
+            await sendPasswordResetEmail(auth, email);
+
+            document.getElementById('forgotSuccess')
+                .style.display = 'block';
+
         }
-        function socialLogin(provider) {
-            alert(`${provider} login would be integrated here. For demo, use: demo@avanify.in / demo123`);
+
+        // ============================================
+        // GOOGLE LOGIN
+        // ============================================
+
+        window.socialLogin = async function () {
+
+            const provider =
+                new GoogleAuthProvider();
+
+            try {
+
+                const result =
+                    await signInWithPopup(auth, provider);
+
+                const user = result.user;
+
+                localStorage.setItem(
+                    'avanify_current',
+                    JSON.stringify({
+                        name: user.displayName,
+                        email: user.email
+                    })
+                );
+
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+
+                alert(error.message);
+
+            }
+
         }
+
     </script>
 </body>
 
