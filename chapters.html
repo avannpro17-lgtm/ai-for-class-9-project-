@@ -714,9 +714,28 @@
       <div class="card-body">
         <div class="card-keywords">${ch.keywords.slice(0, 4).map(k => `<span class="kw">${k}</span>`).join('')}</div>
         <div class="card-actions">
-          <a class="card-btn primary" href="javascript:void(0)" onclick="event.stopPropagation();openChapter(${i})">📖 Summary</a>
-          <a class="card-btn" href="ai-doubt.html" onclick="event.stopPropagation()">🤖 Ask AI</a>
-        </div>
+
+<a class="card-btn primary"
+href="javascript:void(0)"
+onclick="event.stopPropagation();openChapter(${i})">
+📖 Summary
+</a>
+
+${ch.title === 'Motion' ? `
+<a class="card-btn"
+href="motion-notes.html"
+onclick="event.stopPropagation()">
+🎞️ Visual Notes
+</a>
+` : ''}
+
+<a class="card-btn"
+href="ai-doubt.html"
+onclick="event.stopPropagation()">
+🤖 Ask AI
+</a>
+
+</div>
       </div>
     </div>`).join('');
         }
